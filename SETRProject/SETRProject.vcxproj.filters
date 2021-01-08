@@ -16,11 +16,19 @@
     <ClCompile Include="App.xaml.cpp" />
     <ClCompile Include="MainPage.xaml.cpp" />
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="TimeUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="App.xaml.h" />
     <ClInclude Include="MainPage.xaml.h" />
+    <ClInclude Include="GeoPoint.h" />
+    <ClInclude Include="UserPositionResult.h" />
+    <ClInclude Include="TimeUtils.h" />
+    <ClInclude Include="TempPoint.h" />
+    <ClInclude Include="ReadSensorsResult.h" />
+    <ClInclude Include="Mutexed.h" />
+    <ClInclude Include="FindNearestResult.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\LockScreenLogo.scale-200.png">

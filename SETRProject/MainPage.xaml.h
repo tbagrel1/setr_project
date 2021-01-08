@@ -14,8 +14,12 @@ namespace SETRProject
 	/// </summary>
 	public ref class MainPage sealed
 	{
+	private:
+		uint64_t readSensorsInstant;
+		uint64_t findNearestInstant;
 	public:
 		MainPage();
-
+		void updateUi();
+		void onTick(Platform::Object^ sender, Platform::Object^ args);
 	};
 }
