@@ -9,9 +9,24 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="104,192,0,0" Text="readSensors:" TextWrapping="Wrap" VerticalAlignment="Top" Height="26" Width="107"/>
-        <TextBlock HorizontalAlignment="Left" Margin="104,224,0,0" Text="findNearest:" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <TextBlock x:Name="readSensorsInstantTextBox" HorizontalAlignment="Left" Margin="216,192,0,0" Text="TextBlock" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <TextBlock x:Name="findNearestInstantTextBox" HorizontalAlignment="Left" Margin="216,224,0,0" Text="TextBlock" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="124,468,0,0" Text="readSensors:" TextWrapping="Wrap" VerticalAlignment="Top" Height="26" Width="107"/>
+        <TextBlock HorizontalAlignment="Left" Margin="124,500,0,0" Text="findNearest:" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock x:Name="readSensorsInstantTextBox" HorizontalAlignment="Left" Margin="236,468,0,0" Text="TextBlock" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock x:Name="findNearestInstantTextBox" HorizontalAlignment="Left" Margin="236,500,0,0" Text="TextBlock" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        
+        <CheckBox Content="Localisation via GPS" HorizontalAlignment="Left" Margin="143,80,0,0" VerticalAlignment="Top"/>
+
+        <TextBlock HorizontalAlignment="Left" Margin="141,166,0,0" Text="Ma position" TextWrapping="Wrap" VerticalAlignment="Top" SelectionChanged="TextBlock_SelectionChanged"/>
+        <TextBlock HorizontalAlignment="Left" Margin="146,216,0,0" Text="Longitude" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock x:Name="userLongitudeTextBlock" HorizontalAlignment="Left" Margin="236,216,0,0" Text="Entrer votre longitude" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="509,216,0,0" Text="Latitude" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock x:Name="userLatitudeTextBlock" HorizontalAlignment="Left" Margin="609,216,0,0" Text="Entrer votre latitude" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <Button Content="Raffraichir" HorizontalAlignment="Left" Margin="1030,216,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.516,-1.188"/>
+
+        <TextBlock x:Name="nearestMoteNameTextBlock" HorizontalAlignment="Left" Margin="141,366,0,0" Text="Postion du mote le plus proche" TextWrapping="Wrap" VerticalAlignment="Top" SelectionChanged="TextBlock_SelectionChanged"/>
+        <TextBlock HorizontalAlignment="Left" Margin="146,416,0,0" Text="Longitude" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock x:Name="nearestMoteLongitudeTextBlock" HorizontalAlignment="Left" Margin="236,416,0,0" Text="longitude du mote le plus proche" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="509,416,0,0" Text="Latitude" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock x:Name="nearestMoteLatitudeTextBlock" HorizontalAlignment="Left" Margin="609,416,0,0" Text="latitude du mote le plus proche" TextWrapping="Wrap" VerticalAlignment="Top"/>
     </Grid>
 </Page>
