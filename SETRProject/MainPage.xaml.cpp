@@ -209,6 +209,7 @@ MainPage::MainPage()
 
 	gps.init();
 	computeInstant = 0;
+	useGps.update([](bool prev) { return false; });
 }
 
 void MainPage::updateUi()
