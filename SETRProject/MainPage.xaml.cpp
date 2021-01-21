@@ -172,6 +172,17 @@ void Gps::init() {
 	geolocator->PositionChanged += ref new TypedEventHandler<Geolocator^, PositionChangedEventArgs^>(this, &Gps::positionUpdated);
 }
 
+double SETRProject::Gps::getLastLatitude()
+{
+	return userPositionRes.position.latitude;
+}
+
+double SETRProject::Gps::getLastLongitude()
+{
+	return userPositionRes.position.longitude;
+}
+
+
 void Gps::positionUpdated(Geolocator^ geolocator, PositionChangedEventArgs^ args)
 {
 	double latitude = args->Position->Coordinate->Point->Position.Latitude;
@@ -202,10 +213,76 @@ MainPage::MainPage()
 
 void MainPage::updateUi()
 {
-
+	ComputeResult computeRes = computeResult.read();
+	if (computeRes.instant == computeInstant) {
+		return;
+	}
+	computeInstant = computeRes.instant;
+	userLatitudeTextBlock->Text = computeRes.userPosition.latitude.ToString();
+	userLongitudeTextBlock->Text = computeRes.userPosition.longitude.ToString();
+	nearestMoteNameTextBlock->Text = ref new Platform::String(computeRes.nearestActiveMote.moteId.c_str());
+	nearestMoteLocationNameTextBlock->Text = ref new Platform::String(computeRes.nearestActiveMote.positionName.c_str());
+	nearestMoteLatitudeTextBlock->Text = computeRes.nearestActiveMote.position.latitude.ToString();
+	nearestMoteLongitudeTextBlock->Text = computeRes.nearestActiveMote.position.longitude.ToString();
+	nearestMoteTemperatureTextBlock->Text = computeRes.nearestActiveMote.temperature.ToString();
+	if (computeRes.isSuccess) {
+		errorTextBlock->Text = ref new Platform::String();
+	}
+	else {
+		errorTextBlock->Text = ref new Platform::String(computeRes.errorMessage.c_str());
+	}
 }
 
 void MainPage::onTick(Platform::Object^ sender, Platform::Object^ args)
 {
 	this->updateUi();
+}
+
+void MainPage::switchToGps() {
+	refreshButton->IsEnabled = false;
+	userLatitudeTextBlock->IsEnabled = false;
+	userLongitudeTextBlock->IsEnabled = false;
+	useGps.update([](bool prev) { return true; });
+	double lastLatitude = gps.getLastLatitude();
+	double lastLongitude = gps.getLastLongitude();
+	if (lastLatitude != 0.0 || lastLongitude != 0.0) {
+		userPositionResult.update([lastLatitude, lastLongitude](UserPositionResult prevResult) { return UserPositionResult(timestampNow(), true, L"", GeoPoint(lastLatitude, lastLongitude)); });
+	}
+}
+
+void MainPage::switchToManualGeolocation() {
+	refreshButton->IsEnabled = true;
+	userLatitudeTextBlock->IsEnabled = true;
+	userLongitudeTextBlock->IsEnabled = true;
+}
+
+void SETRProject::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+{
+	double latitude = _wtof(userLatitudeTextBlock->Text->Data());
+	double longitude = _wtof(userLongitudeTextBlock->Text->Data());
+	userPositionResult.update([latitude, longitude](UserPositionResult prevResult) { return UserPositionResult(timestampNow(), true, L"", GeoPoint(latitude, longitude)); });
+}
+
+
+void SETRProject::MainPage::UserLongitudeTextBlock_TextChanged(Platform::Object^ sender, Windows::UI::Xaml::Controls::TextChangedEventArgs^ e)
+{
+
+}
+
+
+void SETRProject::MainPage::UserLatitudeTextBlock_TextChanged(Platform::Object^ sender, Windows::UI::Xaml::Controls::TextChangedEventArgs^ e)
+{
+
+}
+
+
+void SETRProject::MainPage::CheckBox_Checked(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+{
+	switchToGps();
+}
+
+
+void SETRProject::MainPage::CheckBox_Unchecked(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+{
+	switchToManualGeolocation();
 }
