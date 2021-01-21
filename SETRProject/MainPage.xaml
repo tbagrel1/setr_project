@@ -43,7 +43,8 @@
         <TextBlock Grid.Row="6" Grid.Column="0" x:Name="nearestMoteNameTextBlock" HorizontalAlignment="Left" Text="Nom du mote le plus proche :" TextWrapping="Wrap" VerticalAlignment="Center"/>
         
         <TextBlock Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Text="Bureau :" TextWrapping="Wrap" VerticalAlignment="Center"/>
-        <TextBlock Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="2" x:Name="nearestMoteLocationNameTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Text="Lieu :" TextWrapping="Wrap" VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="2" x:Name="nearestMoteLocationNameTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
         <TextBlock Grid.Row="8" Grid.Column="1" HorizontalAlignment="Left" Text="Longitude" TextWrapping="Wrap" VerticalAlignment="Center"/>
         <TextBlock Grid.Row="8" Grid.Column="2" x:Name="nearestMoteLongitudeTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
 
