@@ -11,40 +11,45 @@
     <Grid Margin="20">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <CheckBox Grid.Row="0" Grid.ColumnSpan="3" Content="Localisation via GPS" HorizontalAlignment="Center" VerticalAlignment="Top"/>
 
-        <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Text="Ma position :" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Text="Ma position :" TextWrapping="Wrap" VerticalAlignment="Top"/>
 
-        <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Text="Longitude :" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <TextBlock Grid.Row="1" Grid.Column="2" x:Name="userLongitudeTextBlock" HorizontalAlignment="Left" Text="Entrez votre longitude" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Text="Longitude :" TextWrapping="Wrap" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="2" Grid.Column="2" x:Name="userLongitudeTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
 
-        <TextBlock Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Text="Latitude :" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <TextBlock Grid.Row="2" Grid.Column="2" x:Name="userLatitudeTextBlock" HorizontalAlignment="Left" Text="Entrez votre latitude" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Text="Latitude :" TextWrapping="Wrap" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="3" Grid.Column="2" x:Name="userLatitudeTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
 
-        <Button Grid.Row="3" Grid.ColumnSpan="4" Content="Raffraichir" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        <Button Grid.Row="4" Grid.ColumnSpan="4" Content="Raffraichir" HorizontalAlignment="Center" VerticalAlignment="Top"/>
 
-        <TextBlock Grid.Row="4" Grid.Column="0" x:Name="nearestMoteNameTextBlock" HorizontalAlignment="Left" Text="Nom du mote le plus proche :" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <TextBlock Grid.Row="4" Grid.Column="1" x:Name="nearestMotePlaceTextBlock" HorizontalAlignment="Left" Text="Salle du mote le plus proche :" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock Grid.Row="6" Grid.Column="0" x:Name="nearestMoteNameTextBlock" HorizontalAlignment="Left" Text="Nom du mote le plus proche :" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        
+        <TextBlock Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" x:Name="nearestMoteOfficeTextBlock" HorizontalAlignment="Left" Text="Bureau :" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="2" x:Name="nearestMotePTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock Grid.Row="8" Grid.Column="1" HorizontalAlignment="Left" Text="Longitude" TextWrapping="Wrap" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="8" Grid.Column="2" x:Name="nearestMoteLongitudeTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
 
-        <TextBlock Grid.Row="5" Grid.Column="1" HorizontalAlignment="Left" Text="Longitude" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <TextBlock Grid.Row="5" Grid.Column="2" x:Name="nearestMoteLongitudeTextBlock" HorizontalAlignment="Left" Text="longitude du mote le plus proche" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock Grid.Row="9" Grid.Column="1" HorizontalAlignment="Left" Text="Latitude" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock Grid.Row="9" Grid.Column="2" x:Name="nearestMoteLatitudeTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top"/>
 
-        <TextBlock Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left" Text="Latitude" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <TextBlock Grid.Row="6" Grid.Column="2" x:Name="nearestMoteLatitudeTextBlock" HorizontalAlignment="Left" Text="latitude du mote le plus proche" TextWrapping="Wrap" VerticalAlignment="Top"/>
-
-        <TextBlock Grid.Row="7" Grid.ColumnSpan="4" x:Name="errorTextBlock" HorizontalAlignment="Center" Text="message d'erreur" TextWrapping="Wrap" VerticalAlignment="Bottom"/>
+        <TextBlock Grid.Row="11" Grid.ColumnSpan="3" x:Name="errorTextBlock" HorizontalAlignment="Center" Text="message d'erreur" TextWrapping="Wrap" VerticalAlignment="Bottom"/>
     </Grid>
 </Page>
