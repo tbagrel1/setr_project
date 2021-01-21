@@ -40,14 +40,16 @@
           </Hyperlink>
           <Run Text=" to check the location privacy settings."/>
         </TextBlock>
-        <TextBlock Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" Text="Ma position :" TextWrapping="Wrap" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" Text="Ma position :" TextWrapping="Wrap" VerticalAlignment="Center" FontWeight="Bold"/>
         <TextBlock Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Text="Longitude :" TextWrapping="Wrap" VerticalAlignment="Center"/>
         <TextBox Grid.Row="3" Grid.Column="2" x:Name="userLongitudeTextBlock" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Bottom" TextChanged="UserLongitudeTextBlock_TextChanged" InputScope="Number" FontFamily="Segoe UI"/>
         <TextBlock Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Text="Latitude :" TextWrapping="Wrap" VerticalAlignment="Center" FontFamily="Segoe UI"/>
         <TextBox Grid.Row="4" Grid.Column="2" x:Name="userLatitudeTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="UserLatitudeTextBlock_TextChanged" InputScope="Number" FontFamily="Segoe UI"/>
         <Button Grid.Row="5" Grid.ColumnSpan="4" x:Name="refreshButton" Content="Raffraichir" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click"/>
 
-        <TextBlock Grid.Row="7" Grid.Column="0" x:Name="nearestMoteNameTextBlock" HorizontalAlignment="Left" Text="Nom du mote le plus proche :" TextWrapping="Wrap" VerticalAlignment="Center" FontFamily="Segoe UI"/>
+        <!-- <Image Source="ms-appx:///Assets/Images/planTNCY.png"/> -->
+
+        <TextBlock Grid.Row="7" Grid.Column="0" x:Name="nearestMoteNameTextBlock" HorizontalAlignment="Left" Text="Nom du mote le plus proche :" TextWrapping="Wrap" VerticalAlignment="Center" FontFamily="Segoe UI" FontWeight="Bold"/>
         <TextBlock Grid.Row="8" Grid.Column="1" HorizontalAlignment="Left" Text="Température :" TextWrapping="Wrap" VerticalAlignment="Center"/>
         <TextBlock Grid.Row="8" Grid.Column="2" x:Name="nearestMoteTemperatureTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
         <TextBlock Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Text="Lieu :" TextWrapping="Wrap" VerticalAlignment="Center"/>
