@@ -58,6 +58,7 @@
               </Hyperlink>
           <Run Text=" to check the location privacy settings."/>
         </TextBlock>
+        <TextBlock Grid.Row="10" Grid.Column="2" Grid.ColumnSpan="2" x:Name="nearestMoteTemperatureTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
         <TextBlock Grid.Row="11" Grid.ColumnSpan="3" x:Name="errorTextBlock" HorizontalAlignment="Center" Text="message d'erreur" TextWrapping="Wrap" VerticalAlignment="Bottom"/>
     </Grid>
 </Page>
