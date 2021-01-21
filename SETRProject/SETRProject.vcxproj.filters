@@ -25,12 +25,12 @@
     <ClInclude Include="GeoPoint.h" />
     <ClInclude Include="UserPositionResult.h" />
     <ClInclude Include="TimeUtils.h" />
-    <ClInclude Include="TempPoint.h" />
     <ClInclude Include="ReadSensorsResult.h" />
     <ClInclude Include="Mutexed.h" />
-    <ClInclude Include="FindNearestResult.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="StringUtils.h" />
+    <ClInclude Include="Mote.h" />
+    <ClInclude Include="ComputeResult.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\LockScreenLogo.scale-200.png">
@@ -57,9 +57,6 @@
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="SETRProject_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainPage.xaml" />

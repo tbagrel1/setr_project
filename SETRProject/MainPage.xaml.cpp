@@ -174,8 +174,8 @@ void Gps::init() {
 
 void Gps::positionUpdated(Geolocator^ geolocator, PositionChangedEventArgs^ args)
 {
-	double latitude = args->Position->Coordinate->Latitude;
-	double longitude = args->Position->Coordinate->Longitude;
+	double latitude = args->Position->Coordinate->Point->Position.Latitude;
+	double longitude = args->Position->Coordinate->Point->Position.Longitude;
 	userPositionRes = UserPositionResult(timestampNow(), true, L"", GeoPoint(latitude, longitude));
 	if (useGps.read()) {
 		userPositionResult.update([this](UserPositionResult prevResult) { return UserPositionResult(userPositionRes); });
