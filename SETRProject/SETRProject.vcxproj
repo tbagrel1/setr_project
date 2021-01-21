@@ -182,6 +182,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </ClInclude>
     <ClInclude Include="ReadSensorsResult.h" />
+    <ClInclude Include="StringUtils.h" />
     <ClInclude Include="TempPoint.h" />
     <ClInclude Include="TimeUtils.h" />
     <ClInclude Include="UserPositionResult.h" />

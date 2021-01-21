@@ -3,16 +3,16 @@
 #include <string>
 #include <vector>
 
-#include "TempPoint.h"
+#include "Mote.h"
 
 struct ReadSensorsResult
 {
 	uint64_t instant;
 	bool isSuccess;
 	std::wstring errorMessage;
-	std::vector<TempPoint> points;
+	std::map<std::wstring, Mote> motes;
 
 	ReadSensorsResult() : instant(0), isSuccess(false), errorMessage(L"No result yet") {}
-	ReadSensorsResult(const ReadSensorsResult& that) : instant(that.instant), isSuccess(that.isSuccess), errorMessage(that.errorMessage), points(that.points) {}
-	ReadSensorsResult(uint64_t _instant, bool _isSuccess, std::wstring _errorMessage, std::vector<TempPoint> _points) : instant(_instant), isSuccess(_isSuccess), errorMessage(_errorMessage), points(_points) {}
+	ReadSensorsResult(const ReadSensorsResult& that) : instant(that.instant), isSuccess(that.isSuccess), errorMessage(that.errorMessage), motes(that.motes) {}
+	ReadSensorsResult(uint64_t _instant, bool _isSuccess, std::wstring _errorMessage, std::map<std::wstring, Mote> _motes) : instant(_instant), isSuccess(_isSuccess), errorMessage(_errorMessage), motes(_motes) {}
 };

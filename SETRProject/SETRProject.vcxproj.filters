@@ -30,6 +30,7 @@
     <ClInclude Include="Mutexed.h" />
     <ClInclude Include="FindNearestResult.h" />
     <ClInclude Include="json.hpp" />
+    <ClInclude Include="StringUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\LockScreenLogo.scale-200.png">

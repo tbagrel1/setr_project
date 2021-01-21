@@ -6,6 +6,7 @@
 #pragma once
 
 #include "MainPage.g.h"
+#include "UserPositionResult.h"
 
 namespace SETRProject
 {
@@ -15,11 +16,22 @@ namespace SETRProject
 	public ref class MainPage sealed
 	{
 	private:
-		uint64_t readSensorsInstant;
-		uint64_t findNearestInstant;
+		Gps gps;
+		uint64_t computeInstant;
 	public:
 		MainPage();
 		void updateUi();
 		void onTick(Platform::Object^ sender, Platform::Object^ args);
+	};
+
+	public ref class Gps sealed {
+		
+	private:
+		UserPositionResult userPositionRes;
+		Windows::Devices::Geolocation::Geolocator^ geolocator;
+
+	public:
+		void init();
+		void positionUpdated(Windows::Devices::Geolocation::Geolocator^ geolocator, Windows::Devices::Geolocation::PositionChangedEventArgs^ args);
 	};
 }
