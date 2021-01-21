@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    
+
     <Grid Margin="20">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -16,11 +16,13 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -29,36 +31,32 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <CheckBox Grid.Row="0" Grid.ColumnSpan="3" Content="Localisation via GPS" HorizontalAlignment="Center" VerticalAlignment="Center" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-
-        <TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Text="Ma position :" TextWrapping="Wrap" VerticalAlignment="Center"/>
-
-        <TextBlock Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Text="Longitude :" TextWrapping="Wrap" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="2" Grid.Column="2" x:Name="userLongitudeTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="UserLongitudeTextBlock_TextChanged" InputScope="Number"/>
-
-        <TextBlock Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Text="Latitude :" TextWrapping="Wrap" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="3" Grid.Column="2" x:Name="userLatitudeTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="UserLatitudeTextBlock_TextChanged" InputScope="Number"/>
-
-        <Button Grid.Row="4" Grid.ColumnSpan="4" x:Name="refreshButton" Content="Raffraichir" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click"/>
-
-        <TextBlock Grid.Row="6" Grid.Column="0" x:Name="nearestMoteNameTextBlock" HorizontalAlignment="Left" Text="Nom du mote le plus proche :" TextWrapping="Wrap" VerticalAlignment="Center"/>
-        
-        <TextBlock Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Text="Bureau :" TextWrapping="Wrap" VerticalAlignment="Center"/>
-            <TextBlock Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Text="Lieu :" TextWrapping="Wrap" VerticalAlignment="Center"/>
-            <TextBlock Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="2" x:Name="nearestMoteLocationNameTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
-        <TextBlock Grid.Row="8" Grid.Column="1" HorizontalAlignment="Left" Text="Longitude" TextWrapping="Wrap" VerticalAlignment="Center"/>
-        <TextBlock Grid.Row="8" Grid.Column="2" x:Name="nearestMoteLongitudeTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
-
-        <TextBlock Grid.Row="9" Grid.Column="1" HorizontalAlignment="Left" Text="Latitude" TextWrapping="Wrap" VerticalAlignment="Center"/>
-        <TextBlock Grid.Row="9" Grid.Column="2" x:Name="nearestMoteLatitudeTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
-        <TextBlock Grid.Row="10" Grid.Column="1" x:Name="locationDisabledMessage" FontStyle="Italic"
-                 Visibility="Collapsed" Margin="0,15,0,0" TextWrapping="Wrap" >
-          <Run Text="This app is not able to access Location. Go to " />
-              <Hyperlink NavigateUri="ms-settings:privacy-location">
-                  <Run Text="Settings" />
-              </Hyperlink>
+        <TextBlock Grid.Row="1" Grid.ColumnSpan="3" HorizontalAlignment="Left" Text="This app is not able to access Location. " TextWrapping="Wrap" VerticalAlignment="Bottom"/>
+        <TextBlock Grid.Row="2" Grid.ColumnSpan="3" x:Name="LocationDisabledMessage" FontStyle="Italic"
+          TextWrapping="Wrap" >
+          <Run Text="Go to " />
+          <Hyperlink NavigateUri="ms-settings:privacy-location">
+            <Run Text="Settings" />
+          </Hyperlink>
           <Run Text=" to check the location privacy settings."/>
         </TextBlock>
-        <TextBlock Grid.Row="10" Grid.Column="2" Grid.ColumnSpan="2" x:Name="nearestMoteTemperatureTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
-        <TextBlock Grid.Row="11" Grid.ColumnSpan="3" x:Name="errorTextBlock" HorizontalAlignment="Center" Text="message d'erreur" TextWrapping="Wrap" VerticalAlignment="Bottom"/>
+        <TextBlock Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" Text="Ma position :" TextWrapping="Wrap" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Text="Longitude :" TextWrapping="Wrap" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="3" Grid.Column="2" x:Name="userLongitudeTextBlock" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Bottom" TextChanged="UserLongitudeTextBlock_TextChanged" InputScope="Number" FontFamily="Segoe UI"/>
+        <TextBlock Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Text="Latitude :" TextWrapping="Wrap" VerticalAlignment="Center" FontFamily="Segoe UI"/>
+        <TextBox Grid.Row="4" Grid.Column="2" x:Name="userLatitudeTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="UserLatitudeTextBlock_TextChanged" InputScope="Number" FontFamily="Segoe UI"/>
+        <Button Grid.Row="5" Grid.ColumnSpan="4" x:Name="refreshButton" Content="Raffraichir" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click"/>
+
+        <TextBlock Grid.Row="7" Grid.Column="0" x:Name="nearestMoteNameTextBlock" HorizontalAlignment="Left" Text="Nom du mote le plus proche :" TextWrapping="Wrap" VerticalAlignment="Center" FontFamily="Segoe UI"/>
+        <TextBlock Grid.Row="8" Grid.Column="1" HorizontalAlignment="Left" Text="Température :" TextWrapping="Wrap" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="8" Grid.Column="2" x:Name="nearestMoteTemperatureTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Text="Lieu :" TextWrapping="Wrap" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="9" Grid.Column="2" Grid.ColumnSpan="2" x:Name="nearestMoteLocationNameTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="10" Grid.Column="1" HorizontalAlignment="Left" Text="Longitude" TextWrapping="Wrap" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="10" Grid.Column="2" x:Name="nearestMoteLongitudeTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="11" Grid.Column="1" HorizontalAlignment="Left" Text="Latitude" TextWrapping="Wrap" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="11" Grid.Column="2" x:Name="nearestMoteLatitudeTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
+
+        <TextBlock Grid.Row="13" Grid.ColumnSpan="3" x:Name="errorTextBlock" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Bottom"/>
     </Grid>
 </Page>
