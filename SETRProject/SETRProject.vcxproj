@@ -148,6 +148,7 @@
     <ClCompile>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -171,6 +172,7 @@
   <ItemGroup>
     <ClInclude Include="FindNearestResult.h" />
     <ClInclude Include="GeoPoint.h" />
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="Mutexed.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="App.xaml.h">

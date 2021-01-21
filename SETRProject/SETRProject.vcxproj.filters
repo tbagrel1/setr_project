@@ -29,6 +29,7 @@
     <ClInclude Include="ReadSensorsResult.h" />
     <ClInclude Include="Mutexed.h" />
     <ClInclude Include="FindNearestResult.h" />
+    <ClInclude Include="json.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\LockScreenLogo.scale-200.png">

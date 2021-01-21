@@ -16,14 +16,14 @@
         
         <CheckBox Content="Localisation via GPS" HorizontalAlignment="Left" Margin="143,80,0,0" VerticalAlignment="Top"/>
 
-        <TextBlock HorizontalAlignment="Left" Margin="141,166,0,0" Text="Ma position" TextWrapping="Wrap" VerticalAlignment="Top" SelectionChanged="TextBlock_SelectionChanged"/>
+        <TextBlock HorizontalAlignment="Left" Margin="141,166,0,0" Text="Ma position" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" Margin="146,216,0,0" Text="Longitude" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <TextBlock x:Name="userLongitudeTextBlock" HorizontalAlignment="Left" Margin="236,216,0,0" Text="Entrer votre longitude" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" Margin="509,216,0,0" Text="Latitude" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <TextBlock x:Name="userLatitudeTextBlock" HorizontalAlignment="Left" Margin="609,216,0,0" Text="Entrer votre latitude" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <Button Content="Raffraichir" HorizontalAlignment="Left" Margin="1030,216,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.516,-1.188"/>
 
-        <TextBlock x:Name="nearestMoteNameTextBlock" HorizontalAlignment="Left" Margin="141,366,0,0" Text="Postion du mote le plus proche" TextWrapping="Wrap" VerticalAlignment="Top" SelectionChanged="TextBlock_SelectionChanged"/>
+        <TextBlock x:Name="nearestMoteNameTextBlock" HorizontalAlignment="Left" Margin="141,366,0,0" Text="Postion du mote le plus proche" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" Margin="146,416,0,0" Text="Longitude" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <TextBlock x:Name="nearestMoteLongitudeTextBlock" HorizontalAlignment="Left" Margin="236,416,0,0" Text="longitude du mote le plus proche" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" Margin="509,416,0,0" Text="Latitude" TextWrapping="Wrap" VerticalAlignment="Top"/>
