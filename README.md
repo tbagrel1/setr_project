@@ -17,7 +17,10 @@ Pour désactiver la capture des exceptions par l'IDE, il faut lancer le programm
 + Debug x86 Mobile Emulator 10.0.15254.0 720p 5 inch 1GB (Natif uniquement)
 + Debug x86 Ordinateur local (Natif uniquement)
 
-Parfois la carte ne semble pas s'initialiser sur PC, il suffit de relancer l'application.
+## Problèmes connus
+
++ Parfois la carte ne semble pas s'initialiser sur PC, il suffit de relancer l'application.
++ Lors de la compilation et du lancement de l'application sur l'émulateur la première fois, une fatal error est rencontrée à l'initialisation de `MainPage`. Relancer le build semble résoudre le problème, et ce dernier se survient plus par la suite
 
 ## Fonctionnalités
 
