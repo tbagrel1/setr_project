@@ -5,13 +5,13 @@
 #include <string>
 #include "json.hpp"
 #include "StringUtils.h"
-#include "GeoPoint.h"
+#include "GeoPosition.h"
 
 struct Mote {
 	uint64_t instant;
 	std::wstring moteId;
 	double temperature;
-	GeoPoint position;
+	GeoPosition position;
 	std::wstring positionName;
 	bool active;
 
@@ -27,9 +27,9 @@ struct Mote {
 	// ReadSensors JSON constructor
 	Mote(uint64_t _instant, std::wstring _moteId, double _temperature) : instant(_instant), moteId(_moteId), temperature(_temperature), positionName(L""), active(false) {}
 	// Mote static list constructor
-	Mote(std::wstring _moteId, GeoPoint _position, std::wstring _positionName) : instant(0), moteId(_moteId), temperature(0), position(_position), positionName(_positionName), active(false) {}
+	Mote(std::wstring _moteId, GeoPosition _position, std::wstring _positionName) : instant(0), moteId(_moteId), temperature(0), position(_position), positionName(_positionName), active(false) {}
 	// Full constructor
-	Mote(uint64_t _instant, std::wstring _moteId, double _temperature, GeoPoint _position, std::wstring _positionName, bool _active) : instant(_instant), moteId(_moteId), temperature(_temperature), position(_position), positionName(_positionName), active(_active) {}
+	Mote(uint64_t _instant, std::wstring _moteId, double _temperature, GeoPosition _position, std::wstring _positionName, bool _active) : instant(_instant), moteId(_moteId), temperature(_temperature), position(_position), positionName(_positionName), active(_active) {}
 
 	static Mote fromJson(nlohmann::json const& obj) {
 		return Mote(

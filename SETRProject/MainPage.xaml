@@ -5,6 +5,7 @@
     xmlns:local="using:SETRProject"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:maps="using:Windows.UI.Xaml.Controls.Maps"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -17,17 +18,17 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <CheckBox Grid.Row="0" Grid.ColumnSpan="3" Content="Localisation via GPS" x:Name="useGpsCheckBox" HorizontalAlignment="Center" VerticalAlignment="Center" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
@@ -45,18 +46,19 @@
         <TextBox Grid.Row="3" Grid.Column="2" x:Name="userLongitudeTextBlock" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Bottom" TextChanged="UserLongitudeTextBlock_TextChanged" InputScope="Number" FontFamily="Segoe UI"/>
         <TextBlock Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Text="Latitude :" TextWrapping="Wrap" VerticalAlignment="Center" FontFamily="Segoe UI"/>
         <TextBox Grid.Row="4" Grid.Column="2" x:Name="userLatitudeTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" TextChanged="UserLatitudeTextBlock_TextChanged" InputScope="Number" FontFamily="Segoe UI"/>
-        <Button Grid.Row="5" Grid.ColumnSpan="4" x:Name="refreshButton" Content="Raffraichir" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click"/>
+        <Button Grid.Row="5" Grid.ColumnSpan="4" x:Name="refreshButton" Content="Rafraîchir" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click"/>
 
         <!-- <Image Source="ms-appx:///Assets/Images/planTNCY.png"/> -->
+        <maps:MapControl x:Name="myMap" Grid.Row="6" Grid.ColumnSpan="3" Loaded="MyMap_Loaded" MapServiceToken="AmuE6J-L_MMdW9swHUrc3vXGe79BG-dEXZx5JZj4Yi4NuSAHcifEFO1ehGceW5sk" Margin="0,0,0.001,0"/>
 
-        <TextBlock Grid.Row="7" Grid.Column="0" x:Name="nearestMoteNameTextBlock" HorizontalAlignment="Left" Text="Nom du mote le plus proche :" TextWrapping="Wrap" VerticalAlignment="Center" FontFamily="Segoe UI" FontWeight="Bold"/>
+        <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" x:Name="nearestMoteNameTextBlock" HorizontalAlignment="Left" Text="Nom du mote le plus proche :" TextWrapping="Wrap" VerticalAlignment="Center" FontFamily="Segoe UI" FontWeight="Bold"/>
         <TextBlock Grid.Row="8" Grid.Column="1" HorizontalAlignment="Left" Text="Température :" TextWrapping="Wrap" VerticalAlignment="Center"/>
         <TextBlock Grid.Row="8" Grid.Column="2" x:Name="nearestMoteTemperatureTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
         <TextBlock Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Text="Lieu :" TextWrapping="Wrap" VerticalAlignment="Center"/>
         <TextBlock Grid.Row="9" Grid.Column="2" Grid.ColumnSpan="2" x:Name="nearestMoteLocationNameTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
-        <TextBlock Grid.Row="10" Grid.Column="1" HorizontalAlignment="Left" Text="Longitude" TextWrapping="Wrap" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="10" Grid.Column="1" HorizontalAlignment="Left" Text="Longitude :" TextWrapping="Wrap" VerticalAlignment="Center" />
         <TextBlock Grid.Row="10" Grid.Column="2" x:Name="nearestMoteLongitudeTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
-        <TextBlock Grid.Row="11" Grid.Column="1" HorizontalAlignment="Left" Text="Latitude" TextWrapping="Wrap" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="11" Grid.Column="1" HorizontalAlignment="Left" Text="Latitude :" TextWrapping="Wrap" VerticalAlignment="Center"/>
         <TextBlock Grid.Row="11" Grid.Column="2" x:Name="nearestMoteLatitudeTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center"/>
 
         <TextBlock Grid.Row="13" Grid.ColumnSpan="3" x:Name="errorTextBlock" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Bottom"/>

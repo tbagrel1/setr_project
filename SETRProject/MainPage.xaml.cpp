@@ -7,6 +7,7 @@
 
 #include <ctime>
 #include <iostream>
+#include <limits>
 #include "MainPage.xaml.h"
 #include "Mote.h"
 #include "ComputeResult.h"
@@ -16,7 +17,6 @@
 #include "TimeUtils.h"
 #include "json.hpp"
 #include "StringUtils.h"
-#include <limits>
 
 using namespace SETRProject;
 using namespace Platform;
@@ -29,8 +29,10 @@ using namespace Windows::UI::Xaml::Data;
 using namespace Windows::UI::Xaml::Input;
 using namespace Windows::UI::Xaml::Media;
 using namespace Windows::UI::Xaml::Navigation;
+using namespace Windows::UI::Xaml::Controls::Maps;
 using namespace Windows::Web::Http;
 using namespace Windows::Devices::Geolocation;
+using namespace Windows::Storage::Streams;
 
 // Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -48,14 +50,14 @@ Mutexed<ComputeResult> computeResult;
 Mutexed<bool> computeRunning(true);
 
 const std::vector<Mote> MOTES = {
-	Mote(L"9.138", GeoPoint(48.669422, 6.155112), L"Amphi Nord"),
-	Mote(L"111.130", GeoPoint(48.668837, 6.154990), L"Amphi Sud"),
-	Mote(L"151.105", GeoPoint(48.668922, 6.155363), L"Salle E-1.22"),
-	Mote(L"32.131", GeoPoint(48.669400, 6.155340), L"Salle N-0.3"),
-	Mote(L"97.145", GeoPoint(48.669439, 6.155265), L"Bureau 2.6"),
-	Mote(L"120.99", GeoPoint(48.669419, 6.155269), L"Bureau 2.7"),
-	Mote(L"200.124", GeoPoint(48.669394, 6.155287), L"Bureau 2.8"),
-	Mote(L"53.105", GeoPoint(48.669350, 6.155310), L"Bureau 2.9"),
+	Mote(L"9.138", GeoPosition(48.669422, 6.155112), L"Amphi Nord"),
+	Mote(L"111.130", GeoPosition(48.668837, 6.154990), L"Amphi Sud"),
+	Mote(L"151.105", GeoPosition(48.668922, 6.155363), L"Salle E-1.22"),
+	Mote(L"32.131", GeoPosition(48.669400, 6.155340), L"Salle N-0.3"),
+	Mote(L"97.145", GeoPosition(48.669439, 6.155265), L"Bureau 2.6"),
+	Mote(L"120.99", GeoPosition(48.669419, 6.155269), L"Bureau 2.7"),
+	Mote(L"200.124", GeoPosition(48.669394, 6.155287), L"Bureau 2.8"),
+	Mote(L"53.105", GeoPosition(48.669350, 6.155310), L"Bureau 2.9"),
 };
 
 const std::wstring apiUrl = L"http://iotlab.telecomnancy.eu:8080/iotlab/rest/data/1/temperature/last";
@@ -117,7 +119,7 @@ ComputeResult compute(ComputeResult prevResult) {
 		// No change
 		return ComputeResult(prevResult);
 	}
-	GeoPoint userPosition = GeoPoint(userPositionRes.position);
+	GeoPosition userPosition = GeoPosition(userPositionRes.position);
 	bool found = false;
 	double minDistance = (std::numeric_limits<double>::max)();
 	Mote nearestActiveMote;
@@ -288,7 +290,6 @@ MainPage::MainPage()
 	timer->Tick += ref new EventHandler<Object^>(this, &MainPage::onTick);
 
 	gps = ref new Gps();
-	// [this](PositionStatus newStatus) { this->gpsStatusChanged(newStatus); }
 	gps->init(ref new GpsStatusChangedCallback([this](PositionStatus newStatus) { this->gpsStatusChanged(newStatus); }));
 	hideDisabledLocationMessages();
 	computeInstant = 0;
@@ -305,14 +306,17 @@ void MainPage::updateUi()
 		return;
 	}
 	computeInstant = computeRes.instant;
-	userLatitudeTextBlock->Text = computeRes.userPosition.latitude.ToString();
-	userLongitudeTextBlock->Text = computeRes.userPosition.longitude.ToString();
-	nearestMoteNameTextBlock->Text = ref new Platform::String(computeRes.nearestActiveMote.moteId.c_str());
+	if (useGps.read()) {
+		userLatitudeTextBlock->Text = computeRes.userPosition.latitude.ToString();
+		userLongitudeTextBlock->Text = computeRes.userPosition.longitude.ToString();
+	}
+	nearestMoteNameTextBlock->Text = Platform::String::Concat("Mote active la plus proche : ",  ref new Platform::String(computeRes.nearestActiveMote.moteId.c_str()));
 	nearestMoteLocationNameTextBlock->Text = ref new Platform::String(computeRes.nearestActiveMote.positionName.c_str());
 	nearestMoteLatitudeTextBlock->Text = computeRes.nearestActiveMote.position.latitude.ToString();
 	nearestMoteLongitudeTextBlock->Text = computeRes.nearestActiveMote.position.longitude.ToString();
-	nearestMoteTemperatureTextBlock->Text = computeRes.nearestActiveMote.temperature.ToString();
+	nearestMoteTemperatureTextBlock->Text = Platform::String::Concat(computeRes.nearestActiveMote.temperature.ToString(),"°C");
 	errorTextBlock->Text = ref new Platform::String(computeRes.errorMessage.c_str());
+	updateMap();
 }
 
 void MainPage::onTick(Platform::Object^ sender, Platform::Object^ args)
@@ -328,11 +332,12 @@ void MainPage::switchToGps() {
 	double lastLatitude = gps->getLastLatitude();
 	double lastLongitude = gps->getLastLongitude();
 	if (lastLatitude != 0.0 || lastLongitude != 0.0) {
-		userPositionResult.update([lastLatitude, lastLongitude](UserPositionResult prevResult) { return UserPositionResult(timestampNow(), true, L"", GeoPoint(lastLatitude, lastLongitude)); });
+		userPositionResult.update([lastLatitude, lastLongitude](UserPositionResult prevResult) { return UserPositionResult(timestampNow(), true, L"", GeoPosition(lastLatitude, lastLongitude)); });
 	}
 }
 
 void MainPage::switchToManualGeolocation() {
+	useGps.update([](bool prev) { return false; });
 	refreshButton->IsEnabled = true;
 	userLatitudeTextBlock->IsEnabled = true;
 	userLongitudeTextBlock->IsEnabled = true;
@@ -367,11 +372,78 @@ void SETRProject::MainPage::gpsStatusChanged(Windows::Devices::Geolocation::Posi
 	}));
 }
 
+MapIcon^ createPin(Mote mote, bool isNearest) {
+	BasicGeoposition pos = BasicGeoposition();
+	pos.Latitude = mote.position.latitude;
+	pos.Longitude = mote.position.longitude;
+	Geopoint^ point = ref new Geopoint(pos);
+	MapIcon^ pin = ref new MapIcon();
+	pin->Location = point;
+	pin->NormalizedAnchorPoint = Point(0.5, 1.0);
+	pin->ZIndex = isNearest ? 3 : mote.active ? 2 : 1;
+	pin->Title = mote.active ? Platform::String::Concat(mote.temperature.ToString(), "°C")  : ref new Platform::String();
+	pin->Image = isNearest ? RandomAccessStreamReference::CreateFromUri(ref new Uri{ L"ms-appx:///Assets/pin_nearest.png" }) : mote.active ? RandomAccessStreamReference::CreateFromUri(ref new Uri{ L"ms-appx:///Assets/pin_default.png" }) : RandomAccessStreamReference::CreateFromUri(ref new Uri{ L"ms-appx:///Assets/pin_disabled.png" });
+	return pin;
+}
+
+void SETRProject::MainPage::updateMap()
+{
+	// ComputeResult cannot be passed as parameter of this method because ComputeResult is not a managed class
+	// So we are forced to lock again
+	ComputeResult computeRes = computeResult.read();
+	if (computeRes.motes.empty()) {
+		return;
+	}
+	IVector<MapElement^>^ pins = ref new Platform::Collections::Vector<MapElement^>;
+	std::wstring nearestModeId = computeRes.nearestActiveMote.moteId;
+	double minLatitude = computeRes.motes.at(0).position.latitude;
+	double maxLatitude = computeRes.motes.at(0).position.latitude;
+	double minLongitude = computeRes.motes.at(0).position.longitude;
+	double maxLongitude = computeRes.motes.at(0).position.longitude;
+	myMap->MapElements->Clear();
+	for (Mote mote : computeRes.motes) {
+		if (mote.position.latitude > maxLatitude) { maxLatitude = mote.position.latitude; }
+		if (mote.position.latitude < minLatitude) { minLatitude = mote.position.latitude; }
+		if (mote.position.longitude > maxLongitude) { maxLongitude = mote.position.longitude; }
+		if (mote.position.longitude < minLongitude) { minLongitude = mote.position.longitude; }
+		MapIcon^ pin = createPin(mote, mote.moteId == nearestModeId);
+		pins->Append(pin);
+		myMap->MapElements->Append(pin);
+	}
+	if (computeRes.userPosition.latitude > maxLatitude) { maxLatitude = computeRes.userPosition.latitude; }
+	if (computeRes.userPosition.latitude < minLatitude) { minLatitude = computeRes.userPosition.latitude; }
+	if (computeRes.userPosition.longitude > maxLongitude) { maxLongitude = computeRes.userPosition.longitude; }
+	if (computeRes.userPosition.longitude < minLongitude) { minLongitude = computeRes.userPosition.longitude; }
+	// create user pin
+	BasicGeoposition pos = BasicGeoposition();
+	pos.Latitude = computeRes.userPosition.latitude;
+	pos.Longitude = computeRes.userPosition.longitude;
+	Geopoint^ point = ref new Geopoint(pos);
+	MapIcon^ pin = ref new MapIcon();
+	pin->Location = point;
+	pin->NormalizedAnchorPoint = Point(0.5, 1.0);
+	pin->ZIndex = 4;
+	pin->Title = ref new Platform::String();
+	pin->Image = RandomAccessStreamReference::CreateFromUri(ref new Uri{ L"ms-appx:///Assets/user.png" });
+	pins->Append(pin);
+	myMap->MapElements->Append(pin);
+	double latitudeMargin = (maxLatitude - minLatitude) * 0.25;
+	double longitudeMargin = (maxLongitude - minLongitude) * 0.25;
+	BasicGeoposition northWestCorner;
+	northWestCorner.Latitude = maxLatitude + latitudeMargin;
+	northWestCorner.Longitude = minLongitude - longitudeMargin;
+	BasicGeoposition southEastCorner;
+	southEastCorner.Latitude = minLatitude - latitudeMargin;
+	southEastCorner.Longitude = maxLongitude + longitudeMargin;
+	GeoboundingBox^ area = ref new GeoboundingBox(northWestCorner, southEastCorner);
+	myMap->TrySetSceneAsync(MapScene::CreateFromBoundingBox(area));
+}
+
 void SETRProject::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
 	double latitude = _wtof(userLatitudeTextBlock->Text->Data());
 	double longitude = _wtof(userLongitudeTextBlock->Text->Data());
-	userPositionResult.update([latitude, longitude](UserPositionResult prevResult) { return UserPositionResult(timestampNow(), true, L"", GeoPoint(latitude, longitude)); });
+	userPositionResult.update([latitude, longitude](UserPositionResult prevResult) { return UserPositionResult(timestampNow(), true, L"", GeoPosition(latitude, longitude)); });
 }
 
 
@@ -396,4 +468,9 @@ void SETRProject::MainPage::CheckBox_Checked(Platform::Object^ sender, Windows::
 void SETRProject::MainPage::CheckBox_Unchecked(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
 {
 	switchToManualGeolocation();
+}
+
+
+void SETRProject::MainPage::MyMap_Loaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)
+{
 }
