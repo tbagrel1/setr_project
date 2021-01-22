@@ -6,6 +6,7 @@
 //
 
 #include <ctime>
+#include <iostream>
 #include "MainPage.xaml.h"
 #include "Mote.h"
 #include "ComputeResult.h"
@@ -92,13 +93,13 @@ ReadSensorsResult readSensors(std::wstring apiUrl) {
 		}
 		catch (Platform::Exception ^ex) {
 			isSuccess = false;
-			errorMessage = std::wstring(ex->Message->Data());
+			errorMessage = L"Unable to read API response body";
 			// Read body exception
 		}
 	}
 	catch (Platform::Exception ^ex) {
 		isSuccess = false;
-		errorMessage = std::wstring(ex->Message->Data());
+		errorMessage = L"Unable to join the server";
 		// HTTP call exception
 	}
 	return ReadSensorsResult(timestampNow(), isSuccess, errorMessage, motes);
@@ -116,18 +117,6 @@ ComputeResult compute(ComputeResult prevResult) {
 		// No change
 		return ComputeResult(prevResult);
 	}
-	if (!userPositionRes.isSuccess) {
-		ComputeResult result(prevResult);
-		result.isSuccess = false;
-		result.errorMessage = std::wstring(userPositionRes.errorMessage);
-		return result;
-	}
-	if (!readSensorsRes.isSuccess) {
-		ComputeResult result(prevResult);
-		result.isSuccess = false;
-		result.errorMessage = std::wstring(readSensorsRes.errorMessage);
-		return result;
-	}
 	GeoPoint userPosition = GeoPoint(userPositionRes.position);
 	bool found = false;
 	double minDistance = (std::numeric_limits<double>::max)();
@@ -144,32 +133,59 @@ ComputeResult compute(ComputeResult prevResult) {
 			}
 		}
 	}
-	bool isSuccess = found;
-	std::wstring errorMessage = found ? L"" : L"No active mote, cannot compute the nearest one";
+	bool isSuccess;
+	std::wstring errorMessage;
+	if (!userPositionRes.isSuccess) {
+		isSuccess = false;
+		errorMessage = std::wstring(userPositionRes.errorMessage);
+	}
+	else if (!readSensorsRes.isSuccess) {
+		isSuccess = false;
+		errorMessage = std::wstring(readSensorsRes.errorMessage);
+	}
+	else {
+		isSuccess = found;
+		errorMessage = found ? L"" : L"No active mote, cannot compute the nearest one";
+	}
 	return ComputeResult(userPositionRes.instant, readSensorsRes.instant, timestampNow(), isSuccess, errorMessage, motes, userPosition, nearestActiveMote);
 }
 
 void readSensorsThreadFunc() {
 	while (readSensorsRunning.read()) {
-		readSensorsResult.update([](ReadSensorsResult prevResult) { return readSensors(apiUrl); });
+		ReadSensorsResult newResult = readSensors(apiUrl);
+		readSensorsResult.update([newResult](ReadSensorsResult prevResult) { return newResult; });
 		std::this_thread::sleep_for(std::chrono::milliseconds(READ_SENSORS_SLEEP_MILLISECONDS));
 	}
 }
 
 void computeThreadFunc() {
 	while (computeRunning.read()) {
-		computeResult.update([](ComputeResult prevResult) { return compute(prevResult); });
+		ComputeResult newResult = compute(computeResult.read());
+		computeResult.update([newResult](ComputeResult prevResult) { return newResult; });
 		std::this_thread::sleep_for(std::chrono::milliseconds(COMPUTE_SLEEP_MILLISECONDS));
 	}
 }
 	
+PositionStatus convertToPositionStatus(GeolocationAccessStatus accessStatus) {
+	switch (accessStatus) {
+	case GeolocationAccessStatus::Allowed:
+		return PositionStatus::Initializing;
+	case GeolocationAccessStatus::Denied:
+		return PositionStatus::Disabled;
+	default:
+		return PositionStatus::NotAvailable;
+	}
+}
 
-void Gps::init() {
+void Gps::init(GpsStatusChangedCallback^ _statusChangedCallback) {
+	statusChangedCallback = _statusChangedCallback;
 	geolocator = ref new Geolocator();
 	geolocator->DesiredAccuracyInMeters = GPS_SLEEP_METERS;
 	geolocator->ReportInterval = GPS_SLEEP_MILLISECONDS;
-	geolocator->AllowFallbackToConsentlessPositions();
+	concurrency::create_task(geolocator->RequestAccessAsync()).then([this](GeolocationAccessStatus status) { this->statusChanged(convertToPositionStatus(status)); });
+	// geolocator->AllowFallbackToConsentlessPositions();
 	geolocator->PositionChanged += ref new TypedEventHandler<Geolocator^, PositionChangedEventArgs^>(this, &Gps::positionUpdated);
+	geolocator->StatusChanged += ref new TypedEventHandler<Geolocator^, StatusChangedEventArgs^>(this, &Gps::_statusChanged);
 }
 
 double SETRProject::Gps::getLastLatitude()
@@ -185,9 +201,73 @@ double SETRProject::Gps::getLastLongitude()
 
 void Gps::positionUpdated(Geolocator^ geolocator, PositionChangedEventArgs^ args)
 {
-	double latitude = args->Position->Coordinate->Point->Position.Latitude;
-	double longitude = args->Position->Coordinate->Point->Position.Longitude;
-	userPositionRes = UserPositionResult(timestampNow(), true, L"", GeoPoint(latitude, longitude));
+	userPositionRes.position.latitude = args->Position->Coordinate->Point->Position.Latitude;
+	userPositionRes.position.longitude = args->Position->Coordinate->Point->Position.Longitude;
+	userPositionRes.instant = timestampNow();
+	userPositionRes.isSuccess = true;
+	userPositionRes.errorMessage = L"";
+	if (useGps.read()) {
+		userPositionResult.update([this](UserPositionResult prevResult) { return UserPositionResult(userPositionRes); });
+	}
+}
+
+void SETRProject::Gps::_statusChanged(Windows::Devices::Geolocation::Geolocator ^ geolocator, Windows::Devices::Geolocation::StatusChangedEventArgs ^ args)
+{
+	statusChanged(args->Status);
+}
+
+void SETRProject::Gps::statusChanged(PositionStatus newStatus)
+{
+	bool isSuccess;
+	std::wstring errorMessage;
+	switch (newStatus)
+	{
+	case PositionStatus::Ready:
+		// Location platform is providing valid data.
+		isSuccess = true;
+		errorMessage = L"";
+		break;
+
+	case PositionStatus::Initializing:
+		// Location platform is attempting to acquire a fix.
+		isSuccess = true;
+		errorMessage = L"";
+		break;
+
+	case PositionStatus::NoData:
+		// Location platform could not obtain location data.
+		isSuccess = false;
+		errorMessage = L"Not able to determine the location.";
+		break;
+
+	case PositionStatus::Disabled:
+		// The permission to access location data is denied by the user or other policies.
+		isSuccess = false;
+		errorMessage = L"Access to location is denied.";
+		break;
+
+	case PositionStatus::NotInitialized:
+		// The location platform is not initialized. This indicates that the application
+		// has not made a request for location data.
+		isSuccess = false;
+		errorMessage = L"No request for location is made yet.";
+		break;
+
+	case PositionStatus::NotAvailable:
+		// The location platform is not available on this version of the OS.
+		isSuccess = false;
+		errorMessage = L"Location is not available on this version of the OS.";
+		break;
+
+	default:
+		isSuccess = false;
+		errorMessage = L"Unknown GPS status";
+		break;
+	}
+	userPositionRes.instant = timestampNow();
+	userPositionRes.isSuccess = isSuccess;
+	userPositionRes.errorMessage = errorMessage;
+	statusChangedCallback(newStatus);
 	if (useGps.read()) {
 		userPositionResult.update([this](UserPositionResult prevResult) { return UserPositionResult(userPositionRes); });
 	}
@@ -207,9 +287,15 @@ MainPage::MainPage()
 	timer->Start();
 	timer->Tick += ref new EventHandler<Object^>(this, &MainPage::onTick);
 
-	gps.init();
+	gps = ref new Gps();
+	// [this](PositionStatus newStatus) { this->gpsStatusChanged(newStatus); }
+	gps->init(ref new GpsStatusChangedCallback([this](PositionStatus newStatus) { this->gpsStatusChanged(newStatus); }));
+	hideDisabledLocationMessages();
 	computeInstant = 0;
+	useGpsCheckBox->IsChecked = false;
 	useGps.update([](bool prev) { return false; });
+	switchToManualGeolocation();
+	updateUi();
 }
 
 void MainPage::updateUi()
@@ -226,12 +312,7 @@ void MainPage::updateUi()
 	nearestMoteLatitudeTextBlock->Text = computeRes.nearestActiveMote.position.latitude.ToString();
 	nearestMoteLongitudeTextBlock->Text = computeRes.nearestActiveMote.position.longitude.ToString();
 	nearestMoteTemperatureTextBlock->Text = computeRes.nearestActiveMote.temperature.ToString();
-	if (computeRes.isSuccess) {
-		errorTextBlock->Text = ref new Platform::String();
-	}
-	else {
-		errorTextBlock->Text = ref new Platform::String(computeRes.errorMessage.c_str());
-	}
+	errorTextBlock->Text = ref new Platform::String(computeRes.errorMessage.c_str());
 }
 
 void MainPage::onTick(Platform::Object^ sender, Platform::Object^ args)
@@ -244,8 +325,8 @@ void MainPage::switchToGps() {
 	userLatitudeTextBlock->IsEnabled = false;
 	userLongitudeTextBlock->IsEnabled = false;
 	useGps.update([](bool prev) { return true; });
-	double lastLatitude = gps.getLastLatitude();
-	double lastLongitude = gps.getLastLongitude();
+	double lastLatitude = gps->getLastLatitude();
+	double lastLongitude = gps->getLastLongitude();
 	if (lastLatitude != 0.0 || lastLongitude != 0.0) {
 		userPositionResult.update([lastLatitude, lastLongitude](UserPositionResult prevResult) { return UserPositionResult(timestampNow(), true, L"", GeoPoint(lastLatitude, lastLongitude)); });
 	}
@@ -255,6 +336,35 @@ void MainPage::switchToManualGeolocation() {
 	refreshButton->IsEnabled = true;
 	userLatitudeTextBlock->IsEnabled = true;
 	userLongitudeTextBlock->IsEnabled = true;
+}
+
+void SETRProject::MainPage::showDisabledLocationMessages()
+{
+	locationDisabledMessage1->Visibility = Windows::UI::Xaml::Visibility::Visible;
+	locationDisabledMessage2->Visibility = Windows::UI::Xaml::Visibility::Visible;
+}
+
+void SETRProject::MainPage::hideDisabledLocationMessages()
+{
+	locationDisabledMessage1->Visibility = Windows::UI::Xaml::Visibility::Collapsed;
+	locationDisabledMessage2->Visibility = Windows::UI::Xaml::Visibility::Collapsed;
+}
+
+void SETRProject::MainPage::gpsStatusChanged(Windows::Devices::Geolocation::PositionStatus newStatus)
+{
+	locationDisabledMessage1->Dispatcher->RunAsync(Windows::UI::Core::CoreDispatcherPriority::Normal, ref new Windows::UI::Core::DispatchedHandler([this, newStatus] {
+		switch (newStatus)
+		{
+		case PositionStatus::NoData:
+		case PositionStatus::Disabled:
+		case PositionStatus::NotAvailable:
+			this->showDisabledLocationMessages();
+			break;
+		default:
+			this->hideDisabledLocationMessages();
+			break;
+		}
+	}));
 }
 
 void SETRProject::MainPage::Button_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e)

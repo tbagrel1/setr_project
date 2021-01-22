@@ -30,12 +30,12 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <CheckBox Grid.Row="0" Grid.ColumnSpan="3" Content="Localisation via GPS" HorizontalAlignment="Center" VerticalAlignment="Center" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-        <TextBlock Grid.Row="1" Grid.ColumnSpan="3" HorizontalAlignment="Left" Text="This app is not able to access Location. " TextWrapping="Wrap" VerticalAlignment="Bottom"/>
-        <TextBlock Grid.Row="2" Grid.ColumnSpan="3" x:Name="LocationDisabledMessage" FontStyle="Italic"
+        <CheckBox Grid.Row="0" Grid.ColumnSpan="3" Content="Localisation via GPS" x:Name="useGpsCheckBox" HorizontalAlignment="Center" VerticalAlignment="Center" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+        <TextBlock Grid.Row="1" Grid.ColumnSpan="3" x:Name="locationDisabledMessage1" HorizontalAlignment="Left" Text="This app is not able to access Location. " TextWrapping="Wrap" VerticalAlignment="Bottom"/>
+        <TextBlock Grid.Row="2" Grid.ColumnSpan="3" x:Name="locationDisabledMessage2" FontStyle="Italic"
           TextWrapping="Wrap" >
           <Run Text="Go to " />
-          <Hyperlink NavigateUri="ms-settings:privacy-location">
+          <Hyperlink NavigateUri="ms-settings:privacy-location" >
             <Run Text="Settings" />
           </Hyperlink>
           <Run Text=" to check the location privacy settings."/>
